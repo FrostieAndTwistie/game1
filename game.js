@@ -164,7 +164,7 @@ function gameLoop() {
         ctx.fillStyle = 'yellow';
         ctx.font = '74px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('Gratulujem!', SIRKA_OBRAZOVKY / 2, VYSKA_OBRAZOVKY / 2);
+        ctx.fillText('YOU WIN!', SIRKA_OBRAZOVKY / 2, VYSKA_OBRAZOVKY / 2);
     }
 
 
