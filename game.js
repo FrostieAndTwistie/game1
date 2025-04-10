@@ -1,7 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d'); // Kontextvariable pre kreslenie
+const ctx = canvas.getContext('2d'); // Kontextvariable for painting
 
-// --- Herné Nastavenia ---
+// --- Game settings ---
 const SIRKA_OBRAZOVKY = canvas.width;
 const VYSKA_OBRAZOVKY = canvas.height;
 
