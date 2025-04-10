@@ -25,6 +25,13 @@ const cielX = SIRKA_OBRAZOVKY - CIEL_SIRKA - 30;
 const cielY = VYSKA_OBRAZOVKY - 40 - CIEL_VYSKA; // Na zemi
 let tesiSaCiel = false;
 
+// Načítanie obrázkov
+const hracObrazok = new Image();
+hracObrazok.src = 'player1.png';
+
+const cielObrazok = new Image();
+cielObrazok.src = 'player2.png';
+
 // Platformy (pole objektov s x, y, šírkou, výškou)
 const platformy = [
     // Zem
@@ -40,20 +47,11 @@ let stlaceneKlavesy = {}; // Objekt na sledovanie stlačených kláves
 
 // --- Funkcie Kreslenia ---
 function nakresliHraca() {
-    ctx.fillStyle = tesiSaHrac ? 'yellow' : 'green'; // Farba hráča
-    ctx.fillRect(hracX, hracY, HRAC_SIRKA, HRAC_VYSKA);
-    // Jednoduché oči
-    ctx.fillStyle = 'white';
-    ctx.fillRect(hracX + 5, hracY + 10, 10, 10);
-    ctx.fillRect(hracX + HRAC_SIRKA - 15, hracY + 10, 10, 10);
+    ctx.drawImage(hracObrazok, hracX, hracY, HRAC_SIRKA, HRAC_VYSKA);
 }
 
 function nakresliCiel() {
-    ctx.fillStyle = tesiSaCiel ? 'orange' : 'red'; // Farba cieľa
-    ctx.fillRect(cielX, cielY, CIEL_SIRKA, CIEL_VYSKA);
-     // Jednoduchý úsmev
-    ctx.fillStyle = 'black';
-    ctx.fillRect(cielX + 10, cielY + 40, 30, 10);
+    ctx.drawImage(cielObrazok, cielX, cielY, CIEL_SIRKA, CIEL_VYSKA);
 }
 
 function nakresliPlatformy() {
@@ -110,7 +108,7 @@ function detekujKolizie() {
             hracX + HRAC_SIRKA > p.x &&
             hracY + HRAC_VYSKA >= p.y && // Hráčova spodná hrana je pod hornou hranou platformy
             hracY + HRAC_VYSKA - rychlostY <= p.y) { // Ale v predchádzajúcom kroku bola nad ňou
-            
+
             hracY = p.y - HRAC_VYSKA; // Polož hráča na platformu
             rychlostY = 0;
             naZemi = true;
