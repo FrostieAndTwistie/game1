@@ -19,8 +19,8 @@ let naZemi = true;
 let tesiSaHrac = false;
 
 // Cieľ
-const CIEL_SIRKA = 50;
-const CIEL_VYSKA = 70;
+const CIEL_SIRKA = 100;
+const CIEL_VYSKA = 140;
 const cielX = SIRKA_OBRAZOVKY - CIEL_SIRKA - 30;
 const cielY = VYSKA_OBRAZOVKY - 40 - CIEL_VYSKA; // Na zemi
 let tesiSaCiel = false;
