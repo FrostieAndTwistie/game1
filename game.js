@@ -22,7 +22,8 @@ let tesiSaHrac = false;
 const CIEL_SIRKA = 100;
 const CIEL_VYSKA = 140;
 const cielX = SIRKA_OBRAZOVKY - CIEL_SIRKA - 30;
-const cielY = VYSKA_OBRAZOVKY - 40 - CIEL_VYSKA; // Na zemi
+const cielY = 30; // Hore s okrajom 30px
+
 let tesiSaCiel = false;
 
 // Načítanie obrázkov
