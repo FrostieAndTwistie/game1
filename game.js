@@ -6,8 +6,8 @@ const SIRKA_OBRAZOVKY = canvas.width;
 const VYSKA_OBRAZOVKY = canvas.height;
 
 // Hráč
-const HRAC_SIRKA = 40;
-const HRAC_VYSKA = 60;
+const HRAC_SIRKA = 80;
+const HRAC_VYSKA = 120;
 let hracX = 50;
 let hracY = VYSKA_OBRAZOVKY - 40 - HRAC_VYSKA; // Na zemi na začiatku
 let rychlostX = 0;
