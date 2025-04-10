@@ -152,7 +152,7 @@ function gameLoop() {
     ctx.clearRect(0, 0, SIRKA_OBRAZOVKY, VYSKA_OBRAZOVKY);
 
     // Nakresli pozadie ako prvé
-    //nakresliPozadie();
+    nakresliPozadie();
 
     // Nakresli prvky
     nakresliPlatformy();
