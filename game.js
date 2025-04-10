@@ -2,12 +2,8 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d'); // Kontextvariable for painting
 
 // --- Game settings ---
-let SIRKA_OBRAZOVKY = window.innerWidth;
-let VYSKA_OBRAZOVKY = window.innerHeight;
-
-// Nastavíme rozmery canvasu na maximálne rozmery okna
-canvas.width = SIRKA_OBRAZOVKY;
-canvas.height = VYSKA_OBRAZOVKY;
+const SIRKA_OBRAZOVKY = canvas.width;
+const VYSKA_OBRAZOVKY = canvas.height;
 
 // Hráč
 const HRAC_SIRKA = 40;
@@ -36,6 +32,7 @@ hracObrazok.src = 'player1.png';
 const cielObrazok = new Image();
 cielObrazok.src = 'player2.png';
 
+// Načítanie obrázka pozadia
 const pozadieObrazok = new Image();
 pozadieObrazok.src = 'background.png';
 
@@ -43,7 +40,7 @@ pozadieObrazok.src = 'background.png';
 const platformy = [
     // Zem
     { x: 0, y: VYSKA_OBRAZOVKY - 40, sirka: SIRKA_OBRAZOVKY, vyska: 40 },
-    // Ostatné (možno budete chcieť prispôsobiť pozície pre rôzne rozlíšenia)
+    // Ostatné
     { x: 200, y: VYSKA_OBRAZOVKY - 150, sirka: 150, vyska: 20 },
     { x: 400, y: VYSKA_OBRAZOVKY - 280, sirka: 120, vyska: 20 },
     { x: 550, y: VYSKA_OBRAZOVKY - 400, sirka: 100, vyska: 20 }
@@ -151,13 +148,13 @@ function gameLoop() {
     }
 
     // 3. Vykresli všetko
-    // Vyčisti plátno (už to robí prekreslenie pozadia)
-    // ctx.clearRect(0, 0, SIRKA_OBRAZOVKY, VYSKA_OBRAZOVKY);
+    // Vyčisti plátno
+    ctx.clearRect(0, 0, SIRKA_OBRAZOVKY, VYSKA_OBRAZOVKY);
 
     // Nakresli pozadie ako prvé
     nakresliPozadie();
 
-    // Nakresli prvky hry
+    // Nakresli prvky
     nakresliPlatformy();
     nakresliCiel();
     nakresliHraca();
@@ -174,26 +171,6 @@ function gameLoop() {
     // Požiadaj prehliadač o ďalší snímok
     requestAnimationFrame(gameLoop);
 }
-
-// Inicializácia rozmerov pri spustení a pri zmene veľkosti okna
-function upravRozmery() {
-    SIRKA_OBRAZOVKY = window.innerWidth;
-    VYSKA_OBRAZOVKY = window.innerHeight;
-    canvas.width = SIRKA_OBRAZOVKY;
-    canvas.height = VYSKA_OBRAZOVKY;
-
-    // Budete možno chcieť prispôsobiť pozície herných elementov pri zmene rozlíšenia
-    // Napríklad:
-    hracY = VYSKA_OBRAZOVKY - 40 - HRAC_VYSKA;
-    cielX = SIRKA_OBRAZOVKY - CIEL_SIRKA - 30;
-    cielY = VYSKA_OBRAZOVKY - 40 - CIEL_VYSKA;
-    platformy[0].sirka = SIRKA_OBRAZOVKY;
-    platformy[0].y = VYSKA_OBRAZOVKY - 40;
-    // Ostatné platformy možno budete musieť prispôsobiť komplexnejšie
-}
-
-window.addEventListener('resize', upravRozmery);
-upravRozmery(); // Nastavíme rozmery aj pri prvom načítaní stránky
 
 // Spusti hernú slučku
 gameLoop();
