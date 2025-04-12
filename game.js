@@ -45,6 +45,7 @@ let stlaceneKlavesy = {};
 
 // --- Dotykové ovládanie ---
 let dotykStartX = 0;
+let dotykStartY = 0;
 let poslednyDotykX = 0;
 let aktivnyDotyk = false;
 
@@ -57,6 +58,7 @@ canvas.addEventListener('touchstart', (e) => {
     const dotyk = e.touches[0];
     const rect = canvas.getBoundingClientRect();
     dotykStartX = dotyk.clientX - rect.left;
+    dotykStartY = dotyk.clientY - rect.top;
     poslednyDotykX = dotykStartX;
     aktivnyDotyk = true;
 });
@@ -66,9 +68,10 @@ canvas.addEventListener('touchmove', (e) => {
     if (!aktivnyDotyk || tutorialZobrazeny) return;
     const dotyk = e.touches[0];
     const rect = canvas.getBoundingClientRect();
-    const deltaX = (dotyk.clientX - rect.left - poslednyDotykX) * 0.2;
-    rychlostX = deltaX;
-    poslednyDotykX = dotyk.clientX - rect.left;
+    const dotykX = dotyk.clientX - rect.left;
+    const deltaX = dotykX - poslednyDotykX;
+    rychlostX = deltaX * 0.2;
+    poslednyDotykX = dotykX;
 });
 
 canvas.addEventListener('touchend', (e) => {
@@ -76,7 +79,8 @@ canvas.addEventListener('touchend', (e) => {
     if (tutorialZobrazeny) return;
     const dotyk = e.changedTouches[0];
     const rect = canvas.getBoundingClientRect();
-    if ((dotyk.clientY - rect.top) < VYSKA_OBRAZOVKY * 0.5 && naZemi) {
+    const dotykY = dotyk.clientY - rect.top;
+    if ((dotykStartY - dotykY) > 50 && naZemi) {
         rychlostY = -SKOK_VYKON;
         naZemi = false;
     }
