@@ -156,7 +156,10 @@ function gameLoop() {
     
     ctx.clearRect(0, 0, SIRKA_OBRAZOVKY, VYSKA_OBRAZOVKY);
     ctx.drawImage(pozadieObrazok, 0, 0, SIRKA_OBRAZOVKY, VYSKA_OBRAZOVKY);
-    platformy.forEach(p => ctx.fillStyle = 'blue', ctx.fillRect(p.x, p.y, p.sirka, p.vyska));
+    ctx.fillStyle = 'blue';
+    platformy.forEach(p => {
+        ctx.fillRect(p.x, p.y, p.sirka, p.vyska);
+    });
     ctx.drawImage(cielObrazok, cielX, cielY, CIEL_SIRKA, CIEL_VYSKA);
     ctx.drawImage(hracObrazok, hracX, hracY, HRAC_SIRKA, HRAC_VYSKA);
     
