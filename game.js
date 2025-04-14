@@ -48,6 +48,16 @@ let dotykStartX = 0;
 let dotykStartY = 0;
 let poslednyDotykX = 0;
 let aktivnyDotyk = false;
+let dotykPoslednyCas = 0;
+
+// Funkcia pre skok (detekcia dvojitého dotyku)
+function vykonajSkok() {
+    if (Date.now() - dotykPoslednyCas < 300 && naZemi) {
+        rychlostY = -SKOK_VYKON;
+        naZemi = false;
+    }
+    dotykPoslednyCas = Date.now();
+}
 
 canvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
@@ -61,6 +71,11 @@ canvas.addEventListener('touchstart', (e) => {
     dotykStartY = dotyk.clientY - rect.top;
     poslednyDotykX = dotykStartX;
     aktivnyDotyk = true;
+
+    // Detekcia skoku
+    if (dotykStartY < VYSKA_OBRAZOVKY / 2) {
+        vykonajSkok();
+    }
 });
 
 canvas.addEventListener('touchmove', (e) => {
@@ -77,13 +92,6 @@ canvas.addEventListener('touchmove', (e) => {
 canvas.addEventListener('touchend', (e) => {
     e.preventDefault();
     if (tutorialZobrazeny) return;
-    const dotyk = e.changedTouches[0];
-    const rect = canvas.getBoundingClientRect();
-    const dotykY = dotyk.clientY - rect.top;
-    if ((dotykStartY - dotykY) > 50 && naZemi) {
-        rychlostY = -SKOK_VYKON;
-        naZemi = false;
-    }
     rychlostX = 0;
     aktivnyDotyk = false;
 });
@@ -141,23 +149,32 @@ function detekujKolizie() {
 // --- Vykresľovanie ---
 function nakresliTutorial() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    ctx.fillRect(50, 100, SIRKA_OBRAZOVKY-100, 300);
+    ctx.fillRect(50, 100, SIRKA_OBRAZOVKY - 100, 300);
     ctx.fillStyle = 'white';
     ctx.font = '24px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('OVLÁDANIE', SIRKA_OBRAZOVKY/2, 160);
+    ctx.fillText('OVLÁDANIE', SIRKA_OBRAZOVKY / 2, 160);
     ctx.font = '20px Arial';
-    ctx.fillText('PC: A/D ← → = pohyb', SIRKA_OBRAZOVKY/2, 200);
-    ctx.fillText('W/↑/Medzerník = skok', SIRKA_OBRAZOVKY/2, 230);
-    ctx.fillText('MOBILE: Potiahnutie prsta = pohyb', SIRKA_OBRAZOVKY/2, 270);
-    ctx.fillText('Krátky dotyk hore = skok', SIRKA_OBRAZOVKY/2, 300);
-    ctx.fillText('Začni hru ľubovoľným dotykom/klávesou', SIRKA_OBRAZOVKY/2, 360);
+    ctx.fillText('PC: A/D ← → = pohyb', SIRKA_OBRAZOVKY / 2, 200);
+    ctx.fillText('W/↑/Medzerník = skok', SIRKA_OBRAZOVKY / 2, 230);
+    ctx.fillText('MOBILE: Potiahnutie prsta = pohyb', SIRKA_OBRAZOVKY / 2, 270);
+    ctx.fillText('Krátky dotyk hore = skok', SIRKA_OBRAZOVKY / 2, 300);
+    ctx.fillText('Začni hru ľubovoľným dotykom/klávesou', SIRKA_OBRAZOVKY / 2, 360);
+}
+
+function nakresliVyhru() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.fillRect(SIRKA_OBRAZOVKY / 2 - 200, VYSKA_OBRAZOVKY / 2 - 50, 400, 100);
+    ctx.fillStyle = 'yellow';
+    ctx.font = '74px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('YOU WIN!', SIRKA_OBRAZOVKY / 2, VYSKA_OBRAZOVKY / 2);
 }
 
 function gameLoop() {
     spracujOvladanie();
     if (!levelDokonceny) detekujKolizie();
-    
+
     ctx.clearRect(0, 0, SIRKA_OBRAZOVKY, VYSKA_OBRAZOVKY);
     ctx.drawImage(pozadieObrazok, 0, 0, SIRKA_OBRAZOVKY, VYSKA_OBRAZOVKY);
     ctx.fillStyle = 'blue';
@@ -166,14 +183,10 @@ function gameLoop() {
     });
     ctx.drawImage(cielObrazok, cielX, cielY, CIEL_SIRKA, CIEL_VYSKA);
     ctx.drawImage(hracObrazok, hracX, hracY, HRAC_SIRKA, HRAC_VYSKA);
-    
+
     if (tutorialZobrazeny) nakresliTutorial();
-    if (levelDokonceny) {
-        ctx.fillStyle = 'yellow';
-        ctx.font = '74px Arial';
-        ctx.fillText('YOU WIN!', SIRKA_OBRAZOVKY/2, VYSKA_OBRAZOVKY/2);
-    }
-    
+    if (levelDokonceny) nakresliVyhru();
+
     requestAnimationFrame(gameLoop);
 }
 
