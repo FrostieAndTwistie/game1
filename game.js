@@ -21,8 +21,8 @@ let naZemi = true;
 // Cieľ
 const CIEL_SIRKA = 100;
 const CIEL_VYSKA = 140;
-const cielX = SIRKA_OBRAZOVKY - CIEL_SIRKA - 30;
-const cielY = 30;
+let cielX = SIRKA_OBRAZOVKY - CIEL_SIRKA - 30;
+let cielY = 30;
 
 // Obrázky
 const hracObrazok = new Image();
@@ -33,7 +33,7 @@ const pozadieObrazok = new Image();
 pozadieObrazok.src = 'background.png';
 
 // Platformy
-const platformy = [
+let platformy = [
     { x: 0, y: VYSKA_OBRAZOVKY - 40, sirka: SIRKA_OBRAZOVKY, vyska: 40 },
     { x: 200, y: VYSKA_OBRAZOVKY - 150, sirka: 150, vyska: 20 },
     { x: 400, y: VYSKA_OBRAZOVKY - 280, sirka: 120, vyska: 20 },
@@ -42,22 +42,14 @@ const platformy = [
 
 let levelDokonceny = false;
 let stlaceneKlavesy = {};
+let aktualnyLevel = 0;
+const maxLevel = 5;
 
 // --- Dotykové ovládanie ---
 let dotykStartX = 0;
 let dotykStartY = 0;
 let poslednyDotykX = 0;
 let aktivnyDotyk = false;
-let dotykPoslednyCas = 0;
-
-// Funkcia pre skok (detekcia dvojitého dotyku)
-function vykonajSkok() {
-    if (Date.now() - dotykPoslednyCas < 300 && naZemi) {
-        rychlostY = -SKOK_VYKON;
-        naZemi = false;
-    }
-    dotykPoslednyCas = Date.now();
-}
 
 canvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
@@ -71,11 +63,6 @@ canvas.addEventListener('touchstart', (e) => {
     dotykStartY = dotyk.clientY - rect.top;
     poslednyDotykX = dotykStartX;
     aktivnyDotyk = true;
-
-    // Detekcia skoku
-    if (dotykStartY < VYSKA_OBRAZOVKY / 2) {
-        vykonajSkok();
-    }
 });
 
 canvas.addEventListener('touchmove', (e) => {
@@ -92,6 +79,10 @@ canvas.addEventListener('touchmove', (e) => {
 canvas.addEventListener('touchend', (e) => {
     e.preventDefault();
     if (tutorialZobrazeny) return;
+    if (naZemi) {
+        rychlostY = -SKOK_VYKON;
+        naZemi = false;
+    }
     rychlostX = 0;
     aktivnyDotyk = false;
 });
@@ -113,9 +104,9 @@ document.addEventListener('keyup', (e) => {
 function spracujOvladanie() {
     if (levelDokonceny) return;
     rychlostX = 0;
-    if (stlaceneKlavesy['a'] || stlaceneKlavesy['arrowleft']) rychlostX = -HRAC_RYCHLOST_POHYBU;
-    if (stlaceneKlavesy['d'] || stlaceneKlavesy['arrowright']) rychlostX = HRAC_RYCHLOST_POHYBU;
-    if ((stlaceneKlavesy['w'] || stlaceneKlavesy['arrowup'] || stlaceneKlavesy[' ']) && naZemi) {
+    if (stlaceneKlavesy['arrowleft']) rychlostX = -HRAC_RYCHLOST_POHYBU;
+    if (stlaceneKlavesy['arrowright']) rychlostX = HRAC_RYCHLOST_POHYBU;
+    if (stlaceneKlavesy[' '] && naZemi) {
         rychlostY = -SKOK_VYKON;
         naZemi = false;
     }
@@ -138,12 +129,54 @@ function detekujKolizie() {
         }
     });
 
-    if (hracX < cielX + CIEL_SIRKA &&
+    if (
+        hracX < cielX + CIEL_SIRKA &&
         hracX + HRAC_SIRKA > cielX &&
         hracY < cielY + CIEL_VYSKA &&
-        hracY + HRAC_VYSKA > cielY) {
-        levelDokonceny = true;
+        hracY + HRAC_VYSKA > cielY
+    ) {
+        if (!levelDokonceny) {
+            levelDokonceny = true;
+            zobrazVyhruASpustiDalsiLevel();
+        }
     }
+}
+
+function nahodneCislo(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function vygenerujNahodnyLevel() {
+    hracX = nahodneCislo(50, SIRKA_OBRAZOVKY - 100);
+    hracY = nahodneCislo(50, VYSKA_OBRAZOVKY - 200);
+
+    platformy = [];
+    const pocetPlatforiem = nahodneCislo(3, 6);
+    for (let i = 0; i < pocetPlatforiem; i++) {
+        platformy.push({
+            x: nahodneCislo(0, SIRKA_OBRAZOVKY - 150),
+            y: nahodneCislo(100, VYSKA_OBRAZOVKY - 50),
+            sirka: nahodneCislo(100, 200),
+            vyska: 20
+        });
+    }
+
+    cielX = nahodneCislo(100, SIRKA_OBRAZOVKY - 150);
+    cielY = nahodneCislo(30, 150);
+
+    rychlostX = 0;
+    rychlostY = 0;
+    naZemi = false;
+    levelDokonceny = false;
+}
+
+function zobrazVyhruASpustiDalsiLevel() {
+    setTimeout(() => {
+        aktualnyLevel++;
+        if (aktualnyLevel < maxLevel) {
+            vygenerujNahodnyLevel();
+        }
+    }, 1000);
 }
 
 // --- Vykresľovanie ---
@@ -155,20 +188,11 @@ function nakresliTutorial() {
     ctx.textAlign = 'center';
     ctx.fillText('OVLÁDANIE', SIRKA_OBRAZOVKY / 2, 160);
     ctx.font = '20px Arial';
-    ctx.fillText('PC: A/D ← → = pohyb', SIRKA_OBRAZOVKY / 2, 200);
-    ctx.fillText('W/↑/Medzerník = skok', SIRKA_OBRAZOVKY / 2, 230);
-    ctx.fillText('MOBILE: Potiahnutie prsta = pohyb', SIRKA_OBRAZOVKY / 2, 270);
-    ctx.fillText('Krátky dotyk hore = skok', SIRKA_OBRAZOVKY / 2, 300);
+    ctx.fillText('PC: ← → = pohyb', SIRKA_OBRAZOVKY / 2, 200);
+    ctx.fillText('SPACE = skok', SIRKA_OBRAZOVKY / 2, 230);
+    ctx.fillText('MOBILE: Posunutie prsta vľavo/vpravo = pohyb', SIRKA_OBRAZOVKY / 2, 270);
+    ctx.fillText('Jednoduché ťuknutie = skok', SIRKA_OBRAZOVKY / 2, 300);
     ctx.fillText('Začni hru ľubovoľným dotykom/klávesou', SIRKA_OBRAZOVKY / 2, 360);
-}
-
-function nakresliVyhru() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    ctx.fillRect(SIRKA_OBRAZOVKY / 2 - 200, VYSKA_OBRAZOVKY / 2 - 50, 400, 100);
-    ctx.fillStyle = 'yellow';
-    ctx.font = '74px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('YOU WIN!', SIRKA_OBRAZOVKY / 2, VYSKA_OBRAZOVKY / 2);
 }
 
 function gameLoop() {
@@ -177,15 +201,26 @@ function gameLoop() {
 
     ctx.clearRect(0, 0, SIRKA_OBRAZOVKY, VYSKA_OBRAZOVKY);
     ctx.drawImage(pozadieObrazok, 0, 0, SIRKA_OBRAZOVKY, VYSKA_OBRAZOVKY);
+
     ctx.fillStyle = 'blue';
     platformy.forEach(p => {
         ctx.fillRect(p.x, p.y, p.sirka, p.vyska);
     });
+
     ctx.drawImage(cielObrazok, cielX, cielY, CIEL_SIRKA, CIEL_VYSKA);
     ctx.drawImage(hracObrazok, hracX, hracY, HRAC_SIRKA, HRAC_VYSKA);
 
     if (tutorialZobrazeny) nakresliTutorial();
-    if (levelDokonceny) nakresliVyhru();
+
+    if (levelDokonceny) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        ctx.fillRect(SIRKA_OBRAZOVKY / 2 - 200, VYSKA_OBRAZOVKY / 2 - 80, 400, 120);
+
+        ctx.fillStyle = 'yellow';
+        ctx.font = '64px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('YOU WIN!', SIRKA_OBRAZOVKY / 2, VYSKA_OBRAZOVKY / 2);
+    }
 
     requestAnimationFrame(gameLoop);
 }
