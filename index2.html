@@ -3,35 +3,12 @@
 <head>
     <title>Frostie and Twistie - Game 2</title>
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        canvas {
-            display: block;
-            background-color: #87CEEB;
-        }
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f0f0; }
+        canvas { border: 1px solid black; background-color: #87CEEB; } 
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };
-
-        // Inicialne nastavenie
-        resizeCanvas();
-
-        // Prispôsobenie pri zmene veľkosti okna
-        window.addEventListener('resize', resizeCanvas);
-    </script>
-    <script src="game2.js"></script>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script src="game2.js"></script> 
 </body>
 </html>
