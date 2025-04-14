@@ -49,12 +49,6 @@ let tlacidloVlavo = { x: 20, y: HEIGHT - 80, w: 60, h: 60, stlacene: false };
 let tlacidloVpravo = { x: 100, y: HEIGHT - 80, w: 60, h: 60, stlacene: false };
 let tlacidloSkok = { x: WIDTH - 80, y: HEIGHT - 80, w: 60, h: 60, stlacene: false };
 
-let hracUhol = 0;
-let hracScaleY = 1;
-
-let cielScale = 1;
-let cielScaleSmer = 1;
-
 canvas.addEventListener('touchstart', e => {
     if (tutorialZobrazeny) {
         tutorialZobrazeny = false;
@@ -271,18 +265,8 @@ function loop() {
         ctx.fillRect(p.x, p.y, p.sirka, p.vyska);
     });
 
-    ctx.save();
-    ctx.translate(cielX + CIEL_SIRKA / 2, cielY + CIEL_VYSKA / 2);
-    ctx.scale(cielScale, cielScale);
-    ctx.drawImage(cielObr, -CIEL_SIRKA / 2, -CIEL_VYSKA / 2, CIEL_SIRKA, CIEL_VYSKA);
-    ctx.restore();
-
-    ctx.save();
-    ctx.translate(hracX + HRAC_SIRKA / 2, hracY + HRAC_VYSKA / 2);
-    ctx.rotate(hracUhol);
-    ctx.scale(1, hracScaleY);
-    ctx.drawImage(hracObr, -HRAC_SIRKA / 2, -HRAC_VYSKA / 2, HRAC_SIRKA, HRAC_VYSKA);
-    ctx.restore();
+    ctx.drawImage(cielObr, cielX, cielY, CIEL_SIRKA, CIEL_VYSKA);
+    ctx.drawImage(hracObr, hracX, hracY, HRAC_SIRKA, HRAC_VYSKA);
 
     ctx.fillStyle = 'white';
     ctx.font = '20px Arial';
@@ -301,22 +285,6 @@ function loop() {
         ctx.textAlign = 'center';
         ctx.fillText('YOU WIN!', WIDTH / 2, HEIGHT / 2);
     }
-
-    // Animácia hráča
-    if (!naZemi) {
-        hracUhol = Math.sin(Date.now() / 100) * 0.1; // kývanie pri skoku
-        hracScaleY = 0.95 + Math.sin(Date.now() / 100) * 0.05; // jemné "natiahnutie"
-    } else if (Math.abs(rychlostX) > 0) {
-        hracUhol = Math.sin(Date.now() / 100) * 0.05; // kývanie pri chôdzi
-        hracScaleY = 1;
-    } else {
-        hracUhol = 0;
-        hracScaleY = 1;
-    }
-
-    // Animácia cieľa (pulzovanie)
-    cielScale += 0.005 * cielScaleSmer;
-    if (cielScale > 1.05 || cielScale < 0.95) cielScaleSmer *= -1;
 
     requestAnimationFrame(loop);
 }
