@@ -1,0 +1,26 @@
+{
+  "name": "Frostie and Twistie Game",
+  "short_name": "FrostieGame",
+  "description": "Jednoduchá 2D platformová hra vytvorená v JavaScripte.",
+  "start_url": "/index.html", // Alebo "/" ak index.html je koreňový súbor servera
+  "display": "fullscreen",   // Alebo "standalone". Fullscreen skryje aj stavový riadok iOS.
+  "orientation": "landscape-primary", // Vynúti orientáciu na šírku (zmeňte podľa potreby hry)
+  "background_color": "#87CEEB", // Farba pozadia pri načítaní PWA (splash screen)
+  "theme_color": "#000000",      // Farba pre UI prvky (menej dôležité pre iOS fullscreen)
+  "scope": "/",                  // Rozsah platnosti PWA
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable" // maskable pre lepšie ikony na Android
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+       "purpose": "any maskable"
+    }
+    // Môžete pridať ďalšie veľkosti ikon podľa potreby
+  ]
+}
