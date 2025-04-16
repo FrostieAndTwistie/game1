@@ -59,7 +59,7 @@ let cielScaleSmer = 1;
 
 // Funkcia volaná z index.html pri zmene veľkosti okna/canvasu
 function handleResize(newWidth, newHeight) {
-    console.log(`Game handling resize to: ${newWidth}x${newHeight}`);
+    console.log('Game handling resize to: ${newWidth}x${newHeight}');
 
     // Aktualizácia rozmerov základnej platformy
     zakladPlatforma.y = newHeight - 40;
@@ -217,7 +217,7 @@ function kolizie() {
     ) {
         levelHotovy = true;
         score += 10; // Bonusové skóre za dokončenie levelu
-        console.log(`Level ${aktualnyLevel + 1} dokončený! Skóre: ${score}`);
+        console.log('Level ${aktualnyLevel + 1} dokončený! Skóre: ${score}');
         setTimeout(() => {
             aktualnyLevel++;
             if (aktualnyLevel < maxLevel) {
@@ -235,7 +235,7 @@ function kolizie() {
 
 // Generovanie platform a pozícií pre nový level
 function generujLevel() {
-    console.log(`Generujem Level ${aktualnyLevel + 1}`);
+    console.log('Generujem Level ${aktualnyLevel + 1}');
     platformy = [];
     let kroky = 5 + aktualnyLevel; // Zvyšujeme počet platforiem s levelom
     let vyskaKrok = (canvas.height - 250) / kroky; // Rozostup platforiem
@@ -295,7 +295,7 @@ function kresliTutorial() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
     ctx.fillRect(canvas.width * 0.1, canvas.height * 0.15, canvas.width * 0.8, canvas.height * 0.6); // Dynamická veľkosť
     ctx.fillStyle = 'white';
-    ctx.font = `${Math.min(30, canvas.width / 20)}px Arial`; // Dynamická veľkosť fontu
+    ctx.font = '${Math.min(30, canvas.width / 20)}px Arial'; // Dynamická veľkosť fontu
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle'; // Lepšie centrovanie vertikálne
 
@@ -304,19 +304,19 @@ function kresliTutorial() {
     let riadokVyska = canvas.height * 0.06;
 
     if (aktualnyLevel >= maxLevel) {
-        ctx.font = `${Math.min(40, canvas.width / 15)}px Arial Black`;
+        ctx.font = '${Math.min(40, canvas.width / 15)}px Arial Black';
         ctx.fillStyle = 'yellow';
         ctx.fillText('GRATULUJEM!', stredX, startY);
-        ctx.font = `${Math.min(25, canvas.width / 22)}px Arial`;
+        ctx.font = '${Math.min(25, canvas.width / 22)}px Arial';
         ctx.fillStyle = 'white';
-        ctx.fillText(`Prešli ste všetkých ${maxLevel} levelov!`, stredX, startY + riadokVyska * 1.5);
-        ctx.fillText(`Vaše finálne skóre: ${score}`, stredX, startY + riadokVyska * 3);
+        ctx.fillText('Prešli ste všetkých ${maxLevel} levelov!', stredX, startY + riadokVyska * 1.5);
+        ctx.fillText('Vaše finálne skóre: ${score}', stredX, startY + riadokVyska * 3);
         ctx.fillText('Hru reštartujete obnovením stránky (refresh)', stredX, startY + riadokVyska * 5);
 
     } else {
         ctx.fillText('OVLÁDANIE', stredX, startY);
-        ctx.font = `${Math.min(22, canvas.width / 25)}px Arial`; // Menší font pre popis
-        ctx.fillText('PC: Šípky ← → (pohyb), Medzerník / ↑ (skok)', stredX, startY + riadokVyska * 1.5);
+        ctx.font = '${Math.min(22, canvas.width / 25)}px Arial'; // Menší font pre popis
+        ctx.fillText('PC: Šípky vlavo-vpravo (pohyb), Medzernik / sipka hore (skok)', stredX, startY + riadokVyska * 1.5);
         ctx.fillText('Mobil: Tlačidlá na obrazovke', stredX, startY + riadokVyska * 2.5);
         ctx.fillStyle = 'yellow';
         ctx.fillText('Ťuknite alebo stlačte klávesu pre štart', stredX, startY + riadokVyska * 4);
@@ -351,7 +351,7 @@ function kresliTlacidla() {
 
         // Symbol tlačidla
         ctx.fillStyle = 'white';
-        ctx.font = `${Math.min(32, btn.w * 0.6)}px Arial`; // Dynamická veľkosť symbolu
+        ctx.font = '${Math.min(32, btn.w * 0.6)}px Arial'; // Dynamická veľkosť symbolu
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(symboly[index], btn.x + btn.w / 2, btn.y + btn.h / 2 + 2); // Jemné posunutie symbolu pre lepšie centrovanie
@@ -477,11 +477,11 @@ function loop() {
 
     // Vykreslenie skóre
     ctx.fillStyle = 'white';
-    ctx.font = `${Math.min(24, canvas.width / 25)}px Arial`; // Dynamický font
+    ctx.font = '${Math.min(24, canvas.width / 25)}px Arial'; // Dynamický font
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.fillText(`SKÓRE: ${score}`, 20, 20);
-    ctx.fillText(`Level: ${aktualnyLevel + 1} / ${maxLevel}`, 20, 50);
+    ctx.fillText('SKÓRE: ${score}', 20, 20);
+    ctx.fillText('Level: ${aktualnyLevel + 1} / ${maxLevel}', 20, 50);
 
 
     // Vykreslenie mobilných tlačidiel (ak je to potrebné)
@@ -497,7 +497,7 @@ function loop() {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         ctx.fillRect(canvas.width / 2 - 200, canvas.height / 2 - 60, 400, 100); // Približne centrované
         ctx.fillStyle = 'yellow';
-        ctx.font = `${Math.min(50, canvas.width / 10)}px Arial Black`;
+        ctx.font = '${Math.min(50, canvas.width / 10)}px Arial Black';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('LEVEL UP!', canvas.width / 2, canvas.height / 2 - 10);
