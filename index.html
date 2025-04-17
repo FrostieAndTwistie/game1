@@ -1,89 +1,14 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Frostie and Twistie - PWA</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <meta name="apple-mobile-web-app-title" content="FrostieGame"> <meta name="theme-color" content="#000000"> <link rel="manifest" href="manifest.json">
-
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon-180x180.png">
-
+    <title>Frostie and Twistie - Game 2</title>
     <style>
-        /* Štýly pre fullscreen canvas (podobné ako predtým) */
-        html, body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Zabráni posuvníkom */
-            background-color: #000; /* Pozadie za canvasom */
-            position: fixed; /* Zabráni poskakovaniu pri zmene UI */
-        }
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        canvas {
-            display: block;
-            background-color: #87CEEB; /* Farba pozadia canvasu, ak by nebolo pozadie */
-            /* Cursor môžeme nechať defaultný alebo ho skryť v game.js */
-             /* cursor: none; */
-        }
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f0f0; }
+        canvas { border: 1px solid black; background-color: #87CEEB; } 
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
-
-    <script src="game.js"></script>
-
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-
-        // --- Funkcia na prispôsobenie veľkosti Canvasu ---
-        function resizeCanvas() {
-            // Použijeme rozmery vnútorného okna
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            console.log(`PWA Canvas resized to: ${canvas.width}x${canvas.height}`);
-
-            // --- TU INFORMUJTE HRU O ZMENE VEĽKOSTI ---
-            // Je absolútne nevyhnutné, aby game.js vedel o týchto nových rozmeroch
-            // a prispôsobil podľa nich vykresľovanie a logiku.
-            // Príklad volania funkcie definovanej v game.js:
-            if (typeof window.handleResize === 'function') {
-                window.handleResize(canvas.width, canvas.height);
-            }
-        }
-
-        // --- Registrácia Service Worker ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js') // Cesta k vášmu service worker súboru
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    })
-                    .catch(err => {
-                        console.error('ServiceWorker registration failed: ', err);
-                    });
-            });
-        } else {
-            console.log('Service workers are not supported.');
-        }
-
-        // --- Inicializácia ---
-        // Nastavíme počiatočnú veľkosť hneď
-        resizeCanvas();
-
-        // Pridáme listener na zmenu veľkosti okna (napr. otočenie zariadenia)
-        window.addEventListener('resize', resizeCanvas);
-
-        // V PWA režime nepotrebujeme explicitne žiadať fullscreen na klik,
-        // o "fullscreen" (bez UI prehliadača) sa stará samotný PWA režim na iOS
-        // vďaka <meta name="apple-mobile-web-app-capable" content="yes">
-        // a display: fullscreen/standalone v manifeste.
-
-    </script>
+    <canvas id="gameCanvas" width="1024" height="650"></canvas>
+    <script src="game.js"></script> 
 </body>
 </html>
